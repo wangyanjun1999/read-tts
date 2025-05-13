@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "text": "hello",
+    "translation": "你好"
+  },
+  {
+    "id": 2,
+    "text": "goodbye",
+    "translation": "再见"
+  },
+  {
+    "id": 3,
+    "text": "thank you",
+    "translation": "谢谢"
+  },
+  {
+    "id": 4,
+    "text": "a rule of thumb",
+    "translation": "经验法则，拇指规则"
+  },
+  {
+    "id": 5,
+    "text": "apple",
+    "translation": "苹果"
+  },
+  {
+    "id": 6,
+    "text": "banana",
+    "translation": "香蕉"
+  },
+  {
+    "id": 7,
+    "text": "orange",
+    "translation": "橙子"
+  },
+  {
+    "id": 8,
+    "text": "computer",
+    "translation": "电脑"
+  },
+  {
+    "id": 9,
+    "text": "book",
+    "translation": "书"
+  },
+  {
+    "id": 10,
+    "text": "pen",
+    "translation": "笔"
+  },
+  {
+    "id": 11,
+    "text": "bonjour",
+    "translation": "你好（法语）",
+    "language": "fr-FR"
+  },
+  {
+    "id": 12,
+    "text": "merci",
+    "translation": "谢谢（法语）",
+    "language": "fr-FR"
+  },
+  {
+    "id": 13,
+    "text": "au revoir",
+    "translation": "再见（法语）",
+    "language": "fr-FR"
+  },
+  {
+    "id": 14,
+    "text": "s'il vous plaît",
+    "translation": "请（法语）",
+    "language": "fr-FR"
+  },
+  {
+    "id": 15,
+    "text": "excusez-moi",
+    "translation": "对不起（法语）",
+    "language": "fr-FR"
+  }
+]
