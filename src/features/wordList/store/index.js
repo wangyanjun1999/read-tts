@@ -4,7 +4,10 @@ import { create } from 'zustand';
  * 单词列表 Store
  * 管理单词数据和导航
  */
-export const useWordListStore = create((set, get) => ({
+export const useWordListStore = create((set, get) => (
+  
+  
+  {
   // 状态
   words: [],              // 单词列表
   currentIndex: 0,        // 当前索引

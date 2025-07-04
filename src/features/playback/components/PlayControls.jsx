@@ -7,15 +7,20 @@ import {
   ReloadOutlined,
   OrderedListOutlined,
   UnorderedListOutlined,
-  SyncOutlined
+  SyncOutlined,
+  MenuOutlined
 } from '@ant-design/icons';
+import { useState } from 'react';
 import { usePlaybackStore } from '../store';
 import { usePreferencesStore } from '../../preferences/store';
 import { useWordListStore } from '../../wordList/store';
 import { audioEffects } from '../../audio/effects';
 import { WordListEffects } from '../../wordList/effects';
+import PlaylistPanel from '../../playlist/components/PlaylistPanel';
 
 const PlayControls = () => {
+  // 播放列表面板状态
+  const [playlistVisible, setPlaylistVisible] = useState(false);
   // 从 stores 获取状态和方法
   const {
     isPlaying,
@@ -117,6 +122,15 @@ const PlayControls = () => {
         >
           下一个
         </Button>
+
+        <Tooltip title="查看播放列表">
+          <Button
+            icon={<MenuOutlined />}
+            onClick={() => setPlaylistVisible(true)}
+          >
+            播放列表
+          </Button>
+        </Tooltip>
       </Space>
 
       <Space wrap align="center">
@@ -183,6 +197,12 @@ const PlayControls = () => {
           </Space>
         </Tooltip>
       </Space>
+
+      {/* 播放列表面板 */}
+      <PlaylistPanel 
+        visible={playlistVisible} 
+        onClose={() => setPlaylistVisible(false)} 
+      />
     </div>
   );
 };

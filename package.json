@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@andresaya/edge-tts": "^1.2.4",
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "antd": "^5.25.1",
     "cors": "^2.8.5",
     "edge-tts": "^1.0.1",

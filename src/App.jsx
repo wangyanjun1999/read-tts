@@ -1,7 +1,7 @@
 import { Layout, Typography, ConfigProvider, theme, Button, Upload, Space, Progress, notification } from 'antd';
 import { UploadOutlined, SoundOutlined } from '@ant-design/icons';
 import './App.css';
-
+import '@ant-design/v5-patch-for-react-19';
 // 导入重构后的组件
 import WordCard from './features/wordList/components/WordCard';
 import PlayControls from './features/playback/components/PlayControls';
