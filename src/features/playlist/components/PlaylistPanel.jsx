@@ -20,8 +20,8 @@ const PlaylistPanel = ({ visible, onClose }) => {
   const playingIndex = useAudioStore(state => state.playingIndex);
   
   // 计算显示顺序（顺序或随机）
-  const displayList = words.map((word, index) => ({
-    ...word,
+  const displayList = words.map((wordData, index) => ({
+    ...wordData,
     originalIndex: index,
     isActive: index === currentIndex,
     isPlaying: index === playingIndex && isPlaying,
@@ -47,7 +47,7 @@ const PlaylistPanel = ({ visible, onClose }) => {
 
   // 渲染列表项
   const renderItem = (item, index) => {
-    const { word, phonetic, translation, originalIndex, isActive, isPlaying, isPassed } = item;
+    const { text, phonetic, translation, originalIndex, isActive, isPlaying, isPassed } = item;
     
     return (
       <List.Item
@@ -90,7 +90,7 @@ const PlaylistPanel = ({ visible, onClose }) => {
                   color: isActive ? '#1890ff' : isPassed ? '#888' : '#fff'
                 }}
               >
-                {word}
+                {text}
               </Text>
               {phonetic && (
                 <Text type="secondary" style={{ fontSize: 14 }}>

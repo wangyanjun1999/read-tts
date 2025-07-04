@@ -9,7 +9,7 @@ export const usePlaybackStore = create((set, get) => ({
   isPlaying: false,          // 是否正在播放
   playMode: 'sequential',    // 播放模式: sequential | random
   repeatCount: 1,            // 重复次数
-  interval: 3,               // 间隔时间（秒）
+  interval: 1,               // 间隔时间（秒）
   infiniteLoop: false,       // 无限循环
   playCount: 0,              // 当前单词播放次数（内部计数）
   timerRef: null,            // 定时器引用
