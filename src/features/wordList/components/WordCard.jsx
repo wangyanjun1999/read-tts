@@ -1,20 +1,44 @@
 import { useState, useEffect } from 'react';
 import { Card, Button, Typography, Space } from 'antd';
 import { SoundOutlined } from '@ant-design/icons';
+import { useCurrentWord } from '../../../shared/hooks/useStores';
+import { usePreferencesStore } from '../../preferences/store';
+import { useAudioStore } from '../../audio/store';
+import { audioEffects } from '../../audio/effects';
 
 const { Title, Text } = Typography;
 
-const WordCard = ({
-  word,
-  translation,
-  index,
-  total,
-  onPlayAudio,
-  audioPlaying,
-  showTranslation = false,
-  language = 'en-US'
-}) => {
+const WordCard = () => {
+  const { word: currentWord, index, total, isPlaying: isCurrentlyPlaying } = useCurrentWord();
+  const showTranslation = usePreferencesStore(state => state.showTranslation);
+  const language = usePreferencesStore(state => state.selectedLanguage);
+  const audioPlaying = useAudioStore(state => state.audioPlaying);
+  
   const [isFlipped, setIsFlipped] = useState(showTranslation);
+  
+  // 如果没有单词，显示空状态
+  if (!currentWord) {
+    return (
+      <Card
+        style={{
+          width: '100%',
+          maxWidth: 600,
+          margin: '0 auto',
+          minHeight: 300,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#1e1e1e',
+          color: '#666',
+          border: '1px solid #333',
+        }}
+      >
+        <Text style={{ color: '#666' }}>请上传单词文件</Text>
+      </Card>
+    );
+  }
+  
+  const { text: word, translation } = currentWord;
 
   // 当showTranslation属性变化时更新isFlipped状态
   useEffect(() => {
@@ -37,9 +61,13 @@ const WordCard = ({
         justifyContent: 'center',
         background: '#1e1e1e',
         color: 'white',
-        border: '1px solid #333',
+        border: isCurrentlyPlaying ? '2px solid #1890ff' : '1px solid #333',
         borderRadius: 8,
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
+        boxShadow: isCurrentlyPlaying 
+          ? '0 4px 20px rgba(24, 144, 255, 0.5)' 
+          : '0 4px 12px rgba(0, 0, 0, 0.5)',
+        transition: 'all 0.3s ease',
+        transform: isCurrentlyPlaying ? 'scale(1.02)' : 'scale(1)',
       }}
       bodyStyle={{
         display: 'flex',
@@ -50,7 +78,7 @@ const WordCard = ({
       }}
     >
       <div style={{ position: 'absolute', top: 16, left: 16 }}>
-        <Text style={{ color: '#aaa' }}>{index}/{total}</Text>
+        <Text style={{ color: '#aaa' }}>{index + 1}/{total}</Text>
       </div>
 
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
@@ -62,7 +90,7 @@ const WordCard = ({
           type="text"
           icon={<SoundOutlined />}
           size="large"
-          onClick={() => onPlayAudio(word, language)}
+          onClick={() => audioEffects.playAudio(word, language, false, false, index)}
           loading={audioPlaying}
           style={{ color: '#1890ff' }}
         >

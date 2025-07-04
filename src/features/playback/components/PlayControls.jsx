@@ -9,24 +9,69 @@ import {
   UnorderedListOutlined,
   SyncOutlined
 } from '@ant-design/icons';
+import { usePlaybackStore } from '../store';
+import { usePreferencesStore } from '../../preferences/store';
+import { useWordListStore } from '../../wordList/store';
+import { audioEffects } from '../../audio/effects';
+import { WordListEffects } from '../../wordList/effects';
 
-const PlayControls = ({
-  isPlaying,
-  onPlay,
-  onPause,
-  onNext,
-  onPrev,
-  onRepeatChange,
-  onIntervalChange,
-  onPlayModeChange,
-  onShowTranslationChange,
-  onInfiniteLoopChange,
-  repeatCount = 1,
-  interval = 1,
-  playMode = 'sequential',
-  showTranslation = false,
-  infiniteLoop = false
-}) => {
+const PlayControls = () => {
+  // 从 stores 获取状态和方法
+  const {
+    isPlaying,
+    playMode,
+    repeatCount,
+    interval,
+    infiniteLoop,
+    startPlayback,
+    pausePlayback,
+    setPlayMode,
+    setRepeatCount,
+    setInterval,
+    toggleInfiniteLoop
+  } = usePlaybackStore();
+  
+  const { showTranslation, toggleTranslation } = usePreferencesStore();
+  const { nextWord, prevWord, getCurrentWord, currentIndex } = useWordListStore();
+  
+  // 处理播放
+  const handlePlay = () => {
+    startPlayback();
+    const currentWord = getCurrentWord();
+    if (currentWord) {
+      audioEffects.playAudio(currentWord.text, null, true, true, currentIndex);
+      WordListEffects.preloadNextBatch(); // 预加载下一批
+    }
+  };
+  
+  // 处理暂停
+  const handlePause = () => {
+    pausePlayback();
+    audioEffects.pauseAudio();
+  };
+  
+  // 处理下一个
+  const handleNext = () => {
+    const newIndex = nextWord(playMode);
+    if (isPlaying) {
+      const currentWord = getCurrentWord();
+      if (currentWord) {
+        audioEffects.playAudio(currentWord.text, null, false, false, newIndex);
+      }
+    }
+  };
+  
+  // 处理上一个
+  const handlePrev = () => {
+    const newIndex = prevWord(playMode);
+    if (isPlaying) {
+      const currentWord = getCurrentWord();
+      if (currentWord) {
+        audioEffects.playAudio(currentWord.text, null, false, false, newIndex);
+      }
+    }
+  };
+
   return (
     <div style={{
       padding: '16px',
@@ -41,7 +86,7 @@ const PlayControls = ({
         <Button
           type="primary"
           icon={<StepBackwardOutlined />}
-          onClick={onPrev}
+          onClick={handlePrev}
         >
           上一个
         </Button>
@@ -51,7 +96,7 @@ const PlayControls = ({
             type="primary"
             danger
             icon={<PauseCircleOutlined />}
-            onClick={onPause}
+            onClick={handlePause}
           >
             暂停
           </Button>
@@ -59,7 +104,7 @@ const PlayControls = ({
           <Button
             type="primary"
             icon={<PlayCircleOutlined />}
-            onClick={onPlay}
+            onClick={handlePlay}
           >
             播放
           </Button>
@@ -68,7 +113,7 @@ const PlayControls = ({
         <Button
           type="primary"
           icon={<StepForwardOutlined />}
-          onClick={onNext}
+          onClick={handleNext}
         >
           下一个
         </Button>
@@ -78,7 +123,7 @@ const PlayControls = ({
         <Tooltip title="播放模式">
           <Select
             value={playMode}
-            onChange={onPlayModeChange}
+            onChange={setPlayMode}
             style={{ width: 120 }}
             options={[
               { value: 'sequential', label: <><OrderedListOutlined /> 顺序播放</> },
@@ -94,7 +139,7 @@ const PlayControls = ({
               min={1}
               max={10}
               value={repeatCount}
-              onChange={onRepeatChange}
+              onChange={setRepeatCount}
               style={{ width: 60 }}
               disabled={infiniteLoop}
             />
@@ -107,7 +152,7 @@ const PlayControls = ({
             <SyncOutlined spin={infiniteLoop} />
             <Checkbox
               checked={infiniteLoop}
-              onChange={(e) => onInfiniteLoopChange(e.target.checked)}
+              onChange={toggleInfiniteLoop}
             >
               无限循环
             </Checkbox>
@@ -121,7 +166,7 @@ const PlayControls = ({
               min={1}
               max={10}
               value={interval}
-              onChange={onIntervalChange}
+              onChange={setInterval}
               style={{ width: 60 }}
             />
             <span>秒</span>
@@ -133,7 +178,7 @@ const PlayControls = ({
             <span>显示翻译</span>
             <Switch
               checked={showTranslation}
-              onChange={onShowTranslationChange}
+              onChange={toggleTranslation}
             />
           </Space>
         </Tooltip>

@@ -160,7 +160,7 @@ async function generateSingleTTS(text, language = 'en-US', voice) {
   }
 
   // 使用 Python 脚本调用 edge-tts
-  const cmd = `python tts.py "${text}" "${voiceId}" "${filePath}"`;
+  const cmd = `python3 tts.py "${text}" "${voiceId}" "${filePath}"`;
 
   try {
     console.log('执行命令:', cmd);

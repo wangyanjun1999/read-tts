@@ -1,13 +1,16 @@
 import { Radio, Space, Select } from 'antd';
 import { useState, useEffect } from 'react';
 import { GlobalOutlined } from '@ant-design/icons';
+import { usePreferencesStore } from '../store';
 
-const LanguageSelector = ({ 
-  language, 
-  onLanguageChange, 
-  voice, 
-  onVoiceChange 
-}) => {
+const LanguageSelector = () => {
+  const { 
+    selectedLanguage, 
+    selectedVoice, 
+    setLanguage, 
+    setVoice 
+  } = usePreferencesStore();
+  
   const [voices, setVoices] = useState({
     'en-US': [],
     'fr-FR': []
@@ -33,10 +36,10 @@ const LanguageSelector = ({
   
   // 当语言变化时，自动选择该语言的第一个声音
   useEffect(() => {
-    if (voices[language]?.length > 0 && !voice) {
-      onVoiceChange(voices[language][0].id);
+    if (voices[selectedLanguage]?.length > 0 && !selectedVoice) {
+      setVoice(voices[selectedLanguage][0].id);
     }
-  }, [language, voices, voice, onVoiceChange]);
+  }, [selectedLanguage, voices, selectedVoice, setVoice]);
   
   return (
     <div style={{ 
@@ -48,32 +51,32 @@ const LanguageSelector = ({
       <Space direction="vertical" style={{ width: '100%' }}>
         <Space align="center">
           <GlobalOutlined />
-          <span>选择语言:</span>
+          <span>选择语言：</span>
           <Radio.Group 
-            value={language} 
-            onChange={(e) => onLanguageChange(e.target.value)}
-            optionType="button"
-            buttonStyle="solid"
+            value={selectedLanguage} 
+            onChange={(e) => setLanguage(e.target.value)}
           >
             <Radio.Button value="en-US">英语</Radio.Button>
             <Radio.Button value="fr-FR">法语</Radio.Button>
           </Radio.Group>
         </Space>
         
-        {voices[language]?.length > 0 && (
-          <Space align="center">
-            <span>选择声音:</span>
-            <Select
-              value={voice || (voices[language][0]?.id)}
-              onChange={onVoiceChange}
-              style={{ width: 200 }}
-              options={voices[language].map(v => ({
-                value: v.id,
-                label: v.name
-              }))}
-            />
-          </Space>
-        )}
+        <Space align="center">
+          <span>选择声音：</span>
+          <Select
+            value={selectedVoice}
+            onChange={setVoice}
+            style={{ width: 200 }}
+            placeholder="选择声音"
+            allowClear
+          >
+            {voices[selectedLanguage]?.map(v => (
+              <Select.Option key={v.id} value={v.id}>
+                {v.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Space>
       </Space>
     </div>
   );
